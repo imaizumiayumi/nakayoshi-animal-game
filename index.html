@@ -500,7 +500,7 @@ function renderEmptyCells() {
 }
 
 function buildTileImageHTML(animalType, tileSize) {
-  var imgSize = Math.round(tileSize * 0.76);
+  var imgSize = Math.round(tileSize * 0.88);
   var src = getImg(animalType);
   if (src) {
     return '<img src="' + src + '" style="width:' + imgSize + 'px;height:' + imgSize + 'px;object-fit:contain;pointer-events:none;display:block;">';
@@ -512,7 +512,6 @@ function buildTileImageHTML(animalType, tileSize) {
 function buildTileHTML(animalType, tileSize) {
   var animal = ANIMAL_MAP[animalType];
   return buildTileImageHTML(animalType, tileSize)
-    + '<div style="font-size:7px;font-weight:700;color:#333;pointer-events:none;text-align:center;margin-top:1px;">' + animal.name + '</div>'
     + '<div style="position:absolute;top:4px;right:4px;background:#fff;color:#555;border-radius:8px;font-size:7px;font-weight:900;padding:2px 5px;pointer-events:none;">' + animal.level + '</div>';
 }
 
