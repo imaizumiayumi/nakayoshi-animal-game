@@ -114,16 +114,16 @@ input[type=file]{display:none;}
 
 <script>
 const DEFAULT_IMGS = {
-  hamster: "assets/images/Frame 1.svg",
-  rabbit: "assets/images/Frame 2.svg",
-  cat: "assets/images/Frame 3.svg",
-  fox: "assets/images/Frame 4.svg",
-  lion: "assets/images/Frame 5.svg",
-  wolf: "assets/images/Frame 6.svg",
-  bear: "assets/images/Frame 7.svg",
-  elephant: "assets/images/Frame 8.svg",
-  dragon: "assets/images/Frame 9.svg",
-  unicorn: "assets/images/Frame 10.svg",
+  hamster: "assets/images/Frame 1.png",
+  rabbit: "assets/images/Frame 2.png",
+  cat: "assets/images/Frame 3.png",
+  fox: "assets/images/Frame 4.png",
+  lion: "assets/images/Frame 5.png",
+  wolf: "assets/images/Frame 6.png",
+  bear: "assets/images/Frame 7.png",
+  elephant: "assets/images/Frame 8.png",
+  dragon: "assets/images/Frame 9.png",
+  unicorn: "assets/images/Frame 10.png",
 };
 
 var ANIMALS=[
@@ -401,29 +401,44 @@ boardEl.addEventListener("pointerup",function(e){
     if(!target){delete cells[sKey];cells[tKey]={id:src.id,type:src.type,r:tR,c:tC};}
     else if(target.type===src.type&&MERGE_MAP[src.type]){
       var normalNext=MERGE_MAP[src.type];
-      var newType=normalNext;
       var isBonus=false;
+      var bonusType=null;
       // 10%でボーナス：進化先より2〜3レベル上をランダムで
       if(Math.random()<0.10){
-        var keys=Object.keys(AMAP);
+        var akeys=Object.keys(AMAP);
         var normalLv=AMAP[normalNext].level;
-        var bonusCandidates=keys.filter(function(k){
+        var bonusCandidates=akeys.filter(function(k){
           return AMAP[k].level>=normalLv+2 && AMAP[k].level<=normalLv+3;
         });
         if(bonusCandidates.length>0){
-          newType=bonusCandidates[Math.floor(Math.random()*bonusCandidates.length)];
+          bonusType=bonusCandidates[Math.floor(Math.random()*bonusCandidates.length)];
           isBonus=true;
         }
       }
-      delete cells[sKey];cells[tKey]={id:makeId(),type:newType,r:tR,c:tC};
-      mergeFlashKey=tKey;discovered.add(newType);
-      score+=AMAP[newType].level*(isBonus?30:10);updateScore();
+      // 合体した動物はそのまま残す
+      delete cells[sKey];cells[tKey]={id:makeId(),type:normalNext,r:tR,c:tC};
+      mergeFlashKey=tKey;discovered.add(normalNext);
+      score+=AMAP[normalNext].level*10;
+      // ラッキーの場合は空きマスに新しくボーナス動物を追加
+      if(isBonus){
+        var emptyCells=[];
+        for(var er=0;er<GRID_ROWS;er++)for(var ec=0;ec<GRID_COLS;ec++){
+          var ek=er+"-"+ec;if(!cells[ek])emptyCells.push({r:er,c:ec,k:ek});
+        }
+        if(emptyCells.length>0){
+          var pick=emptyCells[Math.floor(Math.random()*emptyCells.length)];
+          cells[pick.k]={id:makeId(),type:bonusType,r:pick.r,c:pick.c};
+          discovered.add(bonusType);
+          score+=AMAP[bonusType].level*30;
+        }
+      }
+      updateScore();
       clearTimeout(mergeFlashTimer);
       mergeFlashTimer=setTimeout(function(){mergeFlashKey=null;render();},600);
       if(isBonus){
-        showToast("🎉 ラッキー！ "+AMAP[newType].name+"があらわれた！","#FF6FD8");
+        showToast("🎉 ラッキー！ "+AMAP[bonusType].name+"があらわれた！","#FF6FD8");
       }else{
-        showToast(AMAP[newType].name+"があらわれた！","#FFD700");
+        showToast(AMAP[normalNext].name+"があらわれた！","#FFD700");
       }
     }else{
       shakeCells.add(tKey);render();
