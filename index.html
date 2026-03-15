@@ -16,6 +16,7 @@ html,body{
 @keyframes mergeFlash{0%{transform:scale(1)}30%{transform:scale(1.6)}60%{transform:scale(0.9)}100%{transform:scale(1)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes starBurst{0%{opacity:1;transform:scale(0)}100%{opacity:0;transform:scale(3)}}
+@keyframes luckyFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-48px) scale(1.4)}}
 @keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .cell-tile{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:14px;cursor:grab;touch-action:none;overflow:hidden;}
@@ -147,7 +148,7 @@ var GRID_COLS=5,GRID_ROWS=7,CELL_SIZE=56;
 
 var customImgs={};
 var cells={},discovered=new Set(["hamster"]);
-var dragging=null,saveTimer=null,mergeFlashKey=null,mergeFlashTimer=null,shakeCells=new Set();
+var dragging=null,saveTimer=null,mergeFlashKey=null,mergeFlashTimer=null,shakeCells=new Set(),luckyFlashKey=null,luckyFlashTimer=null;
 var score=0;
 var currentSlotKey=null,pendingDataURL=null;
 
@@ -370,6 +371,15 @@ function render(){
         star.textContent=s;el.appendChild(star);
       });
     }
+    if(luckyFlashKey===(cell.r+"-"+cell.c)){
+      ["🎁","❤️","🎁","❤️","🎁","❤️"].forEach(function(s,i){
+        var icon=document.createElement("div");
+        var angle=i*(360/6)*Math.PI/180;
+        var tx=Math.cos(angle)*32,ty=Math.sin(angle)*32;
+        icon.style.cssText="position:absolute;font-size:16px;pointer-events:none;animation:luckyFloat 1.0s ease forwards;animation-delay:"+(i*0.1)+"s;top:50%;left:50%;transform:translate(calc(-50% + "+tx+"px),calc(-50% + "+ty+"px));";
+        icon.textContent=s;el.appendChild(icon);
+      });
+    }
   });
 }
 
@@ -431,6 +441,9 @@ boardEl.addEventListener("pointerup",function(e){
           cells[pick.k]={id:makeId(),type:bonusType,r:pick.r,c:pick.c};
           discovered.add(bonusType);
           score+=AMAP[bonusType].level*30;
+          luckyFlashKey=pick.k;
+          clearTimeout(luckyFlashTimer);
+          luckyFlashTimer=setTimeout(function(){luckyFlashKey=null;render();},1200);
         }
       }
       updateScore();
