@@ -362,7 +362,7 @@ function render(){
       :'<div style="font-size:'+Math.round(imgSz*0.72)+'px;line-height:1;pointer-events:none;">'+a.emoji+'</div>';
     el.innerHTML=inner
       +'<div style="font-size:7px;font-weight:700;color:#333;pointer-events:none;text-align:center;margin-top:1px;">'+a.name+'</div>'
-      +'<div style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#FFD700;border-radius:4px;font-size:7px;font-weight:900;padding:1px 3px;pointer-events:none;">'+a.level+'</div>';
+      +'<div style="position:absolute;top:4px;right:4px;background:#fff;color:#555;border-radius:4px;font-size:7px;font-weight:900;padding:2px 5px;pointer-events:none;">'+a.level+'</div>';
     if(isMerge){
       ["✨","⭐","💫","🌟"].forEach(function(s,i){
         var star=document.createElement("div");
