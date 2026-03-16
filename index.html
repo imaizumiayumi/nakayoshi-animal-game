@@ -428,7 +428,7 @@ function showToast(message, color) {
   var toastEl = document.getElementById("toast");
   toastEl.textContent = message;
   toastEl.style.background = color;
-  toastEl.style.color = (color === "#FFD700" || color === "#55EFC4") ? "#111" : "#fff";
+  toastEl.style.color = (color === "#FFD700" || color === "#55EFC4") ? "#553B1F" : "#fff";
   toastEl.style.display = "block";
   setTimeout(function() { toastEl.style.display = "none"; }, 2400);
 }
