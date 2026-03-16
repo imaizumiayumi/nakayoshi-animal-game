@@ -316,7 +316,7 @@ input[type=file] { display: none; }
 </div>
 <div id="evbar">
   <span class="evbar-label">しんか：</span>
-  <span class="evbar-text">ハム→うさぎ→ねこ→きつね→ライオン→おおかみ→くま→ぞう→ドラゴン→ユニコーン</span>
+  <span class="evbar-text" id="evbar-text"></span>
 </div>
 
 <!-- Toast -->
@@ -493,6 +493,14 @@ function loadSave() {
 
 function updateScore() {
   document.getElementById("score-display").textContent = score;
+}
+
+function updateEvbar() {
+  var text = ANIMALS.map(function(a, i) {
+    var name = discovered.has(a.key) ? a.name : "？？？";
+    return name + (i < ANIMALS.length - 1 ? "→" : "");
+  }).join("");
+  document.getElementById("evbar-text").textContent = text;
 }
 
 function scheduleSave() {
@@ -744,6 +752,7 @@ function doMerge(sourceKey, targetRow, targetCol, sourceCell) {
   if (isBonus) spawnBonusAnimal(bonusKey);
 
   updateScore();
+  updateEvbar();
   clearTimeout(mergeFlashTimer);
   mergeFlashTimer = setTimeout(function() { mergeFlashKey = null; render(); }, 600);
 
@@ -907,6 +916,7 @@ document.getElementById("btn-reset").addEventListener("click", function() {
   discovered = new Set(["hamster"]);
   score = 0;
   updateScore();
+  updateEvbar();
   initGrid();
   boardEl.innerHTML = "";
   render();
@@ -985,6 +995,7 @@ window.addEventListener("load", function() {
   var loaded = loadSave();
   if (!loaded) initGrid();
   updateScore();
+  updateEvbar();
   render();
   if (loaded) showToast("まえのつづきをよみこんだよ！", "#a0c4ff");
 });
