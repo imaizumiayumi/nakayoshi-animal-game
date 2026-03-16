@@ -250,6 +250,23 @@ button { font-family: inherit; }
 }
 .zukan-name { font-size: 8px; font-weight: 700; margin-top: 3px; }
 .zukan-level { font-size: 8px; color: #9C6943; }
+.zukan-reset-btn {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  font-family: inherit;
+}
 
 /* プレビューモーダル */
 #preview-modal {
@@ -795,9 +812,27 @@ function renderZukan() {
     itemEl.innerHTML = buildZukanItemHTML(animal, isFound, hasCustomImg);
 
     if (isFound) {
-      (function(animalKey) {
-        itemEl.addEventListener("click", function() { onZukanItemClick(animalKey); });
-      })(animal.key);
+      (function(animalKey, hasImg) {
+        itemEl.addEventListener("click", function(e) {
+          if (e.target.closest(".zukan-reset-btn")) return;
+          onZukanItemClick(animalKey);
+        });
+        if (hasImg) {
+          var resetBtn = document.createElement("button");
+          resetBtn.className = "zukan-reset-btn";
+          resetBtn.innerHTML = '<span class="material-icons" style="font-size:12px;">restore</span>';
+          resetBtn.title = "元の画像に戻す";
+          resetBtn.addEventListener("click", function(e) {
+            e.stopPropagation();
+            delete customImgs[animalKey];
+            lsSet(IMG_KEY, customImgs);
+            render();
+            renderZukan();
+            showToast(ANIMAL_MAP[animalKey].name + "の画像をリセットしたよ", "#a0c4ff");
+          });
+          itemEl.appendChild(resetBtn);
+        }
+      })(animal.key, hasCustomImg);
     }
 
     gridEl.appendChild(itemEl);
