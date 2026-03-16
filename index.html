@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>なかよしアニマルゲーム</title>
 <link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
@@ -58,16 +59,36 @@ html, body {
 
 .hdr-btn {
   border: none;
-  border-radius: 10px;
-  padding: 7px 11px;
-  font-size: 12px;
-  font-weight: 900;
   cursor: pointer;
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#btn-reset { background: #FF6B6B; color: #fff; }
-#btn-save  { background: #55EFC4; color: #222; }
-#btn-book  { background: #FFD700; color: #222; }
+#btn-reset {
+  background: #FFCDD2;
+  color: #E57373;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+#btn-save {
+  background: #BBDEFB;
+  color: #5B9BD5;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+#btn-book {
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 12px;
+  padding: 0 16px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 900;
+  gap: 4px;
+}
 
 #hint {
   margin: 0 16px 6px;
@@ -258,9 +279,9 @@ input[type=file] { display: none; }
       <div class="score-label">スコア</div>
       <div id="score-display">0</div>
     </div>
-    <button id="btn-reset" class="hdr-btn">🗑</button>
-    <button id="btn-save"  class="hdr-btn">💾</button>
-    <button id="btn-book"  class="hdr-btn">📖 ずかん</button>
+    <button id="btn-reset" class="hdr-btn"><span class="material-icons" style="font-size:20px;">delete</span></button>
+    <button id="btn-save"  class="hdr-btn"><span class="material-icons" style="font-size:20px;">save</span></button>
+    <button id="btn-book"  class="hdr-btn">ずかん</button>
   </div>
 </div>
 <div id="hint">
