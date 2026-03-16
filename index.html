@@ -758,7 +758,7 @@ boardEl.addEventListener("pointerup", function(e) {
 
 /* ── ずかんモーダル ── */
 function buildZukanItemHTML(animal, isFound, hasCustomImg) {
-  var imgWrapBg = isFound ? animal.bg + "44" : "rgba(255,255,255,0.05)";
+  var imgWrapBg = isFound ? animal.bg + "44" : "#e8e8e8";
   var imgWrap = '<div class="zukan-img-wrap" style="background:' + imgWrapBg + ';">';
 
   if (isFound) {
@@ -790,8 +790,8 @@ function renderZukan() {
 
     var itemEl = document.createElement("div");
     itemEl.className = "zukan-item";
-    itemEl.style.background = isFound ? animal.bg + "55" : "rgba(255,255,255,0.05)";
-    itemEl.style.border      = "2px solid " + (isFound ? animal.bg + "99" : "rgba(255,255,255,0.08)");
+    itemEl.style.background = isFound ? animal.bg + "55" : "#f0f0f0";
+    itemEl.style.border      = "2px solid " + (isFound ? animal.bg + "99" : "#ddd");
     itemEl.innerHTML = buildZukanItemHTML(animal, isFound, hasCustomImg);
 
     if (isFound) {
