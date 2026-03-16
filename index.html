@@ -717,7 +717,7 @@ function doMerge(sourceKey, targetRow, targetCol, sourceCell) {
   mergeFlashTimer = setTimeout(function() { mergeFlashKey = null; render(); }, 600);
 
   if (isBonus) {
-    showToast("🎉 ラッキー！ " + ANIMAL_MAP[bonusKey].name + "があらわれた！", "#FF6FD8");
+    showToast("ラッキー！ " + ANIMAL_MAP[bonusKey].name + "があらわれた！", "#FF6FD8");
   } else {
     showToast(ANIMAL_MAP[normalNext].name + "があらわれた！", "#FFD700");
   }
@@ -758,7 +758,7 @@ boardEl.addEventListener("pointerup", function(e) {
 
 /* ── ずかんモーダル ── */
 function buildZukanItemHTML(animal, isFound, hasCustomImg) {
-  var imgWrapBg = isFound ? animal.bg + "44" : "#e8e8e8";
+  var imgWrapBg = isFound ? animal.bg + "44" : "#f5f5f5";
   var imgWrap = '<div class="zukan-img-wrap" style="background:' + imgWrapBg + ';">';
 
   if (isFound) {
@@ -790,8 +790,8 @@ function renderZukan() {
 
     var itemEl = document.createElement("div");
     itemEl.className = "zukan-item";
-    itemEl.style.background = isFound ? animal.bg + "55" : "#f0f0f0";
-    itemEl.style.border      = "2px solid " + (isFound ? animal.bg + "99" : "#ddd");
+    itemEl.style.background = isFound ? animal.bg + "55" : "#f7f7f7";
+    itemEl.style.border      = "2px solid " + (isFound ? animal.bg + "99" : "#e8e8e8");
     itemEl.innerHTML = buildZukanItemHTML(animal, isFound, hasCustomImg);
 
     if (isFound) {
@@ -833,7 +833,7 @@ function applyCustomImage() {
   render();
   renderZukan();
   closePreviewModal();
-  showToast("🎨 " + ANIMAL_MAP[currentSlotKey].name + "のえをかえたよ！", "#D5C5FF");
+  showToast(ANIMAL_MAP[currentSlotKey].name + "のえをかえたよ！", "#D5C5FF");
 }
 
 function deleteCustomImage() {
@@ -843,7 +843,7 @@ function deleteCustomImage() {
   render();
   renderZukan();
   closePreviewModal();
-  showToast("🗑 " + ANIMAL_MAP[currentSlotKey].name + "のえをけしたよ", "#a0c4ff");
+  showToast(ANIMAL_MAP[currentSlotKey].name + "のえをけしたよ", "#a0c4ff");
 }
 
 /* ── イベントリスナー ── */
@@ -861,7 +861,7 @@ document.getElementById("btn-reset").addEventListener("click", function() {
   initGrid();
   boardEl.innerHTML = "";
   render();
-  showToast("🆕 あたらしいゲームをはじめたよ！", "#FFD700");
+  showToast("あたらしいゲームをはじめたよ！", "#FFD700");
 });
 
 document.getElementById("btn-book").addEventListener("click", function() {
@@ -914,7 +914,7 @@ window.addEventListener("load", function() {
   if (!loaded) initGrid();
   updateScore();
   render();
-  if (loaded) showToast("📂 まえのつづきをよみこんだよ！", "#a0c4ff");
+  if (loaded) showToast("まえのつづきをよみこんだよ！", "#a0c4ff");
 });
 </script>
 </body>
