@@ -6,6 +6,8 @@
 <title>なかよしアニマルゲーム</title>
 <link rel="icon" type="image/png" href="assets/images/favicon.png">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
@@ -340,6 +342,18 @@ input[type=file] { display: none; }
     <button class="btn-ok" id="btn-ok">これにする！</button>
   </div>
   <button class="btn-del" id="btn-del">このえをけす</button>
+</div>
+
+<!-- トリミングモーダル -->
+<div id="crop-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="font-size:15px;font-weight:900;color:#fff;" id="crop-name"></div>
+  <div style="width:280px;height:280px;overflow:hidden;">
+    <img id="crop-img" src="" alt="" style="max-width:100%;">
+  </div>
+  <div style="display:flex;gap:12px;">
+    <button id="btn-crop-cancel" style="padding:10px 24px;background:rgba(255,255,255,0.15);border:none;border-radius:10px;font-size:14px;font-weight:900;color:#fff;cursor:pointer;font-family:inherit;">キャンセル</button>
+    <button id="btn-crop-ok" style="padding:10px 24px;background:#4DB971;border:none;border-radius:10px;font-size:14px;font-weight:900;color:#fff;cursor:pointer;font-family:inherit;">これにする！</button>
+  </div>
 </div>
 
 <input type="file" id="file-input" accept="image/*">
@@ -910,17 +924,40 @@ document.getElementById("zukan-modal").addEventListener("click", function(e) {
   if (e.target === this) this.classList.remove("open");
 });
 
+var cropper = null;
+
+function openCropModal(dataURL) {
+  var cropModal = document.getElementById("crop-modal");
+  var cropImg   = document.getElementById("crop-img");
+  document.getElementById("crop-name").textContent = ANIMAL_MAP[currentSlotKey].name;
+  cropImg.src = dataURL;
+  cropModal.style.display = "flex";
+  if (cropper) { cropper.destroy(); cropper = null; }
+  cropper = new Cropper(cropImg, { aspectRatio: 1, viewMode: 1, autoCropArea: 1 });
+}
+
+function closeCropModal() {
+  document.getElementById("crop-modal").style.display = "none";
+  if (cropper) { cropper.destroy(); cropper = null; }
+}
+
+document.getElementById("btn-crop-ok").addEventListener("click", function() {
+  if (!cropper) return;
+  pendingDataURL = cropper.getCroppedCanvas({ width: 400, height: 400 }).toDataURL("image/png");
+  closeCropModal();
+  document.getElementById("preview-name").textContent = ANIMAL_MAP[currentSlotKey].name;
+  document.getElementById("preview-img").src          = pendingDataURL;
+  document.getElementById("btn-del").style.display    = "none";
+  document.getElementById("preview-modal").classList.add("open");
+});
+
+document.getElementById("btn-crop-cancel").addEventListener("click", closeCropModal);
+
 document.getElementById("file-input").addEventListener("change", function(e) {
   var file = e.target.files[0];
   if (!file) return;
   var reader = new FileReader();
-  reader.onload = function(ev) {
-    pendingDataURL = ev.target.result;
-    document.getElementById("preview-name").textContent    = ANIMAL_MAP[currentSlotKey].name;
-    document.getElementById("preview-img").src             = pendingDataURL;
-    document.getElementById("btn-del").style.display       = "none";
-    document.getElementById("preview-modal").classList.add("open");
-  };
+  reader.onload = function(ev) { openCropModal(ev.target.result); };
   reader.readAsDataURL(file);
   this.value = "";
 });
