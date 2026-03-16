@@ -849,7 +849,7 @@ function deleteCustomImage() {
 /* ── イベントリスナー ── */
 document.getElementById("btn-save").addEventListener("click", function() {
   var saved = lsSet(SAVE_KEY, buildSave());
-  showToast(saved ? "✅ ほぞんしたよ！" : "❌ ほぞんできなかった…");
+  showToast(saved ? "✅ ほぞんしたよ！" : "❌ ほぞんできなかった…", "#4695D0");
 });
 
 document.getElementById("btn-reset").addEventListener("click", function() {
